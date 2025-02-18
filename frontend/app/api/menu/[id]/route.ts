@@ -1,12 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL + "/menu";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+interface Context {
+  params: Promise<{ id: string }>;
+}
+
+export async function GET(req: NextRequest, context: Context) {
   try {
-    const res = await fetch(`${BASE_URL}/${params.id}`, {
+    const { id } = await context.params;
+    const res = await fetch(`${BASE_URL}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -23,13 +26,11 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, context: Context) {
   try {
+    const { id } = await context.params;
     const body = await req.json();
-    const res = await fetch(`${BASE_URL}/${params.id}`, {
+    const res = await fetch(`${BASE_URL}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -50,12 +51,10 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, context: Context) {
   try {
-    const res = await fetch(`${BASE_URL}/${params.id}`, {
+    const { id } = await context.params;
+    const res = await fetch(`${BASE_URL}/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
