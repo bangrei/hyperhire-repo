@@ -8,7 +8,6 @@ export declare class MenuService {
         name: string;
         parentId: string | null;
         depth: number;
-        createdAt: Date;
     })[]>;
     createItem(data: Prisma.MenuCreateInput): Promise<{
         success: boolean;

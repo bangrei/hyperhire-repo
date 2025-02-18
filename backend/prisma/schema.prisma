@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -20,5 +20,4 @@ model Menu {
   parent      Menu?       @relation("Submenu", fields: [parentId], references: [id], onDelete: Cascade)
   subMenus    Menu[]      @relation("Submenu")
   depth       Int
-  createdAt   DateTime    @default(now())
 }
