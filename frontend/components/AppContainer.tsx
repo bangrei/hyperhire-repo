@@ -8,17 +8,25 @@ import MainContent from "./MainContent";
 import { setListMenu } from "@/store/slices/menuSlices";
 import service from "@/service/service";
 import Image from "next/image";
+import SideMenuShimmer from "./SideMenuShimmer";
+import LoadingWidget from "./LoadingWidget";
 
 const AppContainer = () => {
   const dispatch = useAppDispatch();
   const [expand, setExpand] = useState(true);
   const allMenu = useAppSelector((state) => state.menu.allMenu);
+  const [loading, setLoading] = useState(true);
 
   const fetchMenu = async () => {
-    const json = await service.getParents();
-    console.log("JSON", json);
-    const data = json.map((it: any) => it as Menu);
-    dispatch(setListMenu(data));
+    try {
+      setLoading(true);
+      const json = await service.getParents();
+      const data = json.map((it: any) => it as Menu);
+      dispatch(setListMenu(data));
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -63,9 +71,16 @@ const AppContainer = () => {
               onClick={() => setExpand(!expand)}
             />
           </div>
-          <SideMenu expanded={expand} onselectMenu={() => setExpand(!expand)} />
+          {loading && <SideMenuShimmer />}
+          {!loading && (
+            <SideMenu
+              expanded={expand}
+              onselectMenu={() => setExpand(!expand)}
+            />
+          )}
         </div>
-        <MainContent fetchMenu={fetchMenu} />
+        {loading && <LoadingWidget />}
+        {!loading && <MainContent fetchMenu={fetchMenu} />}
       </div>
     </div>
   );
