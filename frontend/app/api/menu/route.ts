@@ -9,6 +9,7 @@ export async function GET() {
         "Content-Type": "application/json",
       },
     });
+    console.log("RES", res);
     if (!res.ok) {
       throw new Error(`Failed to fetch menu, status: ${res.status}`);
     }
@@ -16,6 +17,7 @@ export async function GET() {
     const json = await res.json();
     return NextResponse.json(json);
   } catch (error) {
+    console.log("error", error);
     return NextResponse.json(
       { error: "Failed to fetch menu" },
       { status: 500 }
