@@ -18,7 +18,7 @@ const MainContent = (props: Props) => {
   const [expandAll, setExpandAll] = useState(true);
   const activeMenu = useAppSelector((state) => state.menu.activeMenu);
   const onSelection = (selection: Menu) => {
-    console.log("selection", selection);
+    dispatch(setActiveMenu(selection));
   };
   const updateActiveMenu = async (menu: Menu) => {
     const json = await service.getParents();
@@ -63,10 +63,7 @@ const MainContent = (props: Props) => {
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex flex-col gap-4">
             <span className="text-slate-800">Menu</span>
-            <MenuDropdown
-              items={activeMenu?.subMenus}
-              onSelected={onSelection}
-            />
+            <MenuDropdown onSelected={onSelection} />
           </div>
           <div className="flex gap-4">
             <ButtonAction
